@@ -14,9 +14,13 @@ result_dir = 'results'
 data_dir = 'datasets'
 cache_dir = 'cache'
 run_dir_ignore = ['results', 'datasets', 'cache']
+dlatents_dir = 'latent_representations'
+generated_dir = 'generated_images'
+randomize_noise = False
 
 # experimental - replace Dense layers with TreeConnect
 use_treeconnect = False
 treeconnect_threshold = 1024
+
 
 #----------------------------------------------------------------------------
