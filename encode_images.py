@@ -111,9 +111,14 @@ def main():
     os.makedirs(args.video_dir, exist_ok=True)
 
     # Initialize generator and perceptual model
-    tflib.init_tf()
-    with dnnlib.util.open_url(args.model_url, cache_dir=config.cache_dir) as f:
-        generator_network, discriminator_network, Gs_network = pickle.load(f)
+
+    Model = './models/karras2019stylegan-ffhq-1024x1024.pkl'
+    model_file = glob.glob(Model)
+    if len(model_file) == 1:
+        model_file = open(model_file[0], "rb")
+    else:
+        raise Exception('Failed to find the model')
+    generator_network, discriminator_network, Gs_network = pickle.load(model_file)
 
     generator = Generator(Gs_network, args.batch_size, clipping_threshold=args.clipping_threshold, tiled_dlatent=args.tile_dlatents, model_res=args.model_res, randomize_noise=args.randomize_noise)
     if (args.dlatent_avg != ''):
@@ -121,8 +126,14 @@ def main():
 
     perc_model = None
     if (args.use_lpips_loss > 0.00000001):
-        with dnnlib.util.open_url('https://drive.google.com/uc?id=1N2-m9qszOeVC9Tq77WxsLnuWwOedQiD2', cache_dir=config.cache_dir) as f:
-            perc_model =  pickle.load(f)
+        Model = './models/vgg16_zhang_perceptual.pkl'
+        model_file = glob.glob(Model)
+        if len(model_file) == 1:
+            model_file = open(model_file[0], "rb")
+        else:
+            raise Exception('Failed to find the model')
+        perc_model = pickle.load(model_file)
+        
     perceptual_model = PerceptualModel(args, perc_model=perc_model, batch_size=args.batch_size)
     perceptual_model.build_perceptual_model(generator, discriminator_network)
 
