@@ -8,6 +8,7 @@ import numpy as np
 import dnnlib
 import dnnlib.tflib as tflib
 import config
+import glob
 from encoder.generator_model import Generator
 from encoder.perceptual_model import PerceptualModel, load_images
 #from tensorflow.keras.models import load_model
